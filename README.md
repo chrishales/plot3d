@@ -7,7 +7,7 @@ Written by Christopher A. Hales. Correspondence regarding plot3d is always welco
 
 plot3d is released under a BSD 3-Clause Licence; refer to the licence in this repository or the header of ```task_plot3d.py``` for details.
 
-#### Installation
+## Installation
 
 Download the source files into a directory containing your measurement set. Without changing directories, open CASA and type
 ```
@@ -28,6 +28,6 @@ For a more permanent installation, go to the hidden directory ```.casa``` which 
 execfile('/<path_to_task_directory>/mytasks.py')
 ```
 
-#### Acknowledging the use of plot3d
+## Acknowledging the use of plot3d
 
 plot3d is provided in the hope that it (or elements of its code) will be useful for your work. If you find that it is, I would appreciate an acknowledgement in your work, but this is not required. Happy plot3d-ing!
