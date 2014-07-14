@@ -3,7 +3,7 @@ plot3d
 
 CASA task to quickly inspect a MS for RFI by plotting time vs frequency vs amplitude.
 
-Current version: 1.0
+Current version: 1.0 (12 July 2014)
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
