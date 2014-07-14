@@ -1,7 +1,7 @@
 plot3d
 ======
 
-CASA task to quickly inspect a MS for RFI by plotting time vs frequency vs amplitude.
+[CASA](http://casa.nrao.edu/) task to quickly inspect a MS for RFI by plotting time vs frequency vs amplitude.
 
 Current version: 1.0 (12 July 2014)
 
