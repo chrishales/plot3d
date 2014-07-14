@@ -7,7 +7,8 @@ Written by Christopher A. Hales. Correspondence regarding plot3d is always welco
 
 plot3d is released under a BSD 3-Clause Licence; refer to the licence in this repository or the header of ```task_plot3d.py``` for details.
 
-![screenshot](./screenshot.png "screenshot of 3D-rotatable view")
+An example screenshot of the 3D-rotatable view produced by plot3d is shown below:
+![screenshot](./screenshot.png)
 
 ## Installation
 
