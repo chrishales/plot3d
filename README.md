@@ -3,6 +3,8 @@ plot3d
 
 CASA task to quickly inspect a MS for RFI by plotting time vs frequency vs amplitude.
 
+Current version: 1.0
+
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
 plot3d is released under a BSD 3-Clause Licence; refer to the licence in this repository or the header of ```task_plot3d.py``` for details.
