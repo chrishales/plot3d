@@ -12,7 +12,8 @@ plot3d is released under a BSD 3-Clause Licence; refer to the licence in this re
 An example screenshot of the 3D-rotatable view produced by plot3d is shown below:
 ![screenshot](./screenshot.png)
 
-## Installation
+Installation
+======
 
 Download the source files into a directory containing your measurement set. Without changing directories, open CASA and type
 ```
@@ -33,6 +34,9 @@ For a more permanent installation, go to the hidden directory ```.casa``` which 
 execfile('/<path_to_task_directory>/mytasks.py')
 ```
 
-## Acknowledging the use of plot3d
+Acknowledging use of plot3d
+======
 
-plot3d is provided in the hope that it (or elements of its code) will be useful for your work. If you find that it is, I would appreciate an acknowledgement in your work, but this is not required. Happy plot3d-ing!
+plot3d is provided in the hope that it (or elements of its code) will be useful for your work. If you find that it is, I would appreciate an acknowledgement in your work, but this is not required.
+
+Happy plot3d-ing!
