@@ -7,7 +7,7 @@ Current version: 1.0 (12 July 2014)
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
-plot3d is released under a BSD 3-Clause Licence; refer to the licence in this repository or the header of ```task_plot3d.py``` for details.
+plot3d is released under a BSD 3-Clause Licence (open source, commercially useable); refer to the licence in this repository or the header of ```task_plot3d.py``` for details.
 
 An example screenshot of the 3D-rotatable view produced by plot3d is shown below:
 ![screenshot](./screenshot.png)
