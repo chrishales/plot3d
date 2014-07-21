@@ -15,9 +15,9 @@ An example screenshot of the 3D-rotatable view produced by plot3d is shown below
 Installation
 ======
 
-Download the source files into a directory containing your measurement set. The latest version can be obtained [here](https://github.com/chrishales/plot3d/releases/latest).
+Download the latest version of the source files from [here](https://github.com/chrishales/plot3d/releases/latest).
 
-Without changing directories, open CASA and type
+Place the source files into a directory containing your measurement set. Without changing directories, open CASA and type
 ```
 os.system('buildmytasks')
 ```
