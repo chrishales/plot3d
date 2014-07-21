@@ -3,7 +3,7 @@ plot3d
 
 [CASA](http://casa.nrao.edu/) task to quickly inspect a measurement set for RFI by plotting time vs frequency vs amplitude.
 
-Current version: 1.0 (12 July 2014)
+Latest version: 1.0 (12 July 2014)
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
@@ -15,7 +15,9 @@ An example screenshot of the 3D-rotatable view produced by plot3d is shown below
 Installation
 ======
 
-Download the source files into a directory containing your measurement set. Without changing directories, open CASA and type
+Download the source files into a directory containing your measurement set. The latest version can be obtained [here](https://github.com/chrishales/plot3d/releases/latest).
+
+Without changing directories, open CASA and type
 ```
 os.system('buildmytasks')
 ```
