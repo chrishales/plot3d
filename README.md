@@ -3,7 +3,7 @@ plot3d
 
 [CASA](http://casa.nrao.edu/) task to quickly inspect a measurement set for RFI by plotting time vs frequency vs amplitude.
 
-Latest version: 1.0 (12 July 2014)
+[Latest version: 1.0 (12 July 2014)](https://github.com/chrishales/plot3d/releases/latest)
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
