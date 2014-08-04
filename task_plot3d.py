@@ -33,6 +33,7 @@ from pylab import ion,ioff
 
 # HISTORY:
 #   1.0  12Jul2014  Initial version.
+#   1.1  04Aug2014  Fixed up time axis problem; correlation selection improved.
 #
 
 def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng):
@@ -43,8 +44,8 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     #    Quickly inspect data for RFI by plotting time vs frequency vs amplitude
     #    Christopher A. Hales
     #
-    #    Version 1.0 (tested with CASA Version 4.2.1)
-    #    12 July 2014
+    #    Version 1.1 (tested with CASA Version 4.2.1)
+    #    4 August 2014
     
     casalog.origin('plot3d')
     
@@ -177,9 +178,9 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     
     scan_list.sort()
     
-    # get integration time; assume it doesn't change in any
-    # way throughout the observation, ie between spw's, etc
-    inttime=scan_summary[str(scan_list[0])]['0']['IntegrationTime']
+    # get integration time in minutes; assume it doesn't change in
+    # any way throughout the observation, ie between spw's, etc
+    inttime=scan_summary[str(scan_list[0])]['0']['IntegrationTime'] / 60.0
     
     # Calculate number of true time steps per scan.
     # In the code below, a dummy timestep will be added at each
@@ -193,8 +194,8 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     scan_ntime    = []
     scan_effntime = []
     for scan in scan_list:
-        scan_ntime.append(scan_summary[str(scan)]['0']['nRow']/nbaselines/nspw)
-        tempvar=int(np.floor(scan_summary[str(scan)]['0']['nRow']/nbaselines/nspw/float(timecomp)))+2
+        scan_ntime.append(scan_summary[str(scan)]['0']['nRow']/nbaselines)
+        tempvar=int(np.floor(scan_summary[str(scan)]['0']['nRow']/nbaselines/float(timecomp)))+2
         # guard against the user inputting infinite timecomp
         if tempvar == 2:
             scan_effntime.append(tempvar+1)
@@ -205,7 +206,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     
     # go through each scan and add a dummy timestep before
     # and after each one, with time difference equal to
-    # one ten thousandth of the integration time (make this
+    # one ten thousandth of a time step (make this
     # small so that a slope doesn't show up in the plot)
     intdividefactor=10000.0
     M=np.zeros(ntime)
@@ -249,6 +250,15 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     # time is in seconds from zero modified Julian date...not very aesthetic
     # subtract off the starting time and convert to minutes
     M=(M-M.min())/60
+    
+    # For each gap between scans, modify the data so it looks like only 5
+    # integration times have passed. For example, this will make it easier
+    # to look at your secondary calibrator data. This will of course make
+    # your time axis look weird...but it can improve 3D plot rendering speed
+    for i in range(len(scan_list)-1):
+        i += 1
+        tempval = M[sum(scan_effntime[0:i])] - M[sum(scan_effntime[0:i])-1] 
+        M[sum(scan_effntime[0:i]):] = M[sum(scan_effntime[0:i]):] - tempval + 5*inttime
     
     # go through each spectral window and extract amplitude data
     if plotall:
@@ -448,7 +458,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     
     ax.set_title(plot_title)
     #ax.set_zscale('log')
-    ax.plot_surface(M2D, N2D, P, rstride=1, cstride=1, cmap=cm.jet)
+    ax.plot_surface(M2D, N2D, P, rstride=1, cstride=1, cmap=cm.jet, vmin=0.05)
     #if isinstance(plotfig,str):
     #    figname=plotfig
     #    plotfig=1
