@@ -13,10 +13,13 @@
 		spikes while performing data compression to speed up plotting.
 		Your MS remains read-only throughout this program.
 		
+		If your data contains multiple scans, gaps between scans will
+		be reset to 5 integration timescales.
+		
 		
 		Christopher A. Hales
-		Version 1.0 (tested with CASA Version 4.2.1)
-		12 July 2014
+		Version 1.1 (tested with CASA Version 4.2.1)
+		4 August 2014
 		
 		
 		Code available at: http://github.com/chrishales/plot3d
@@ -24,7 +27,7 @@
 		to the header in task_plot3d.py for details.
 		
 		
-		ASSUMPTIONS:
+		THIS TASK ASSUMES THE FOLLOWING:
 		* The end channel of each spw has been flagged. This
 		  will make the plots look nicer (you should be flagging
 		  these channels anyway).
