@@ -67,14 +67,14 @@
                     <value>model_data</value>
                 </allowed>
             </param>
-            <param type="int" name="corr">
-                <description>correlation (integer: 0=RR 1=RL 2=LR 3=LL)</description>
-                <value>0</value>
+            <param type="string" name="corr">
+                <description>correlation (RR/RL/LR/LL)</description>
+                <value>RR</value>
                 <allowed kind="enum">
-                    <value>0</value>
-                    <value>1</value>
-                    <value>2</value>
-                    <value>3</value>
+                    <value>RR</value>
+                    <value>RL</value>
+                    <value>LR</value>
+                    <value>LL</value>
                 </allowed>
             </param>
             <param type="bool" name="plotall">
