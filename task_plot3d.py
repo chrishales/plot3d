@@ -62,6 +62,59 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     tb.close
     nspw=vtble.shape[1]
     
+    # Get mapping between correlation string and number.
+    # Assume they don't change throughout observation.
+    # This is clunky...
+    tb.open(vis+'/DATA_DESCRIPTION')
+    if plotall:
+        # Get id of a spw in the data, just grab first one within the first
+        # scan on the chosen field so that some statistics can be obtained.
+        # Note: I won't assume that spw specifies data_desc_id in the main table, even
+        #       though in most cases it probably does. Probably overkill given the lack
+        #       of checks done elsewhere in this code...
+        # later we will gather scan information by looking at
+	# a single spw and assuming it represents all spw's
+        ms.open(vis)
+        ms.msselect({'field':str(fid)})
+        tempddid=ms.getdata(["DATA_DESC_ID"])['data_desc_id'][0]
+        ms.close
+        spw=tb.getcell('SPECTRAL_WINDOW_ID',tempddid)
+        polid=tb.getcell('POLARIZATION_ID',tempddid)
+    else:
+        temptb=tb.query('SPECTRAL_WINDOW_ID='+str(spw))
+        polid=temptb.getcell('POLARIZATION_ID')
+    
+    tb.close
+    tb.open(vis+'/POLARIZATION')
+    npol=tb.getcell('NUM_CORR',polid)
+    tb.close
+    if npol == 2:
+        if corr == 'RR':
+            corrID = 0
+        elif corr == 'LL':
+            corrID = 1
+        else:
+            casalog.post('*** plot3d error: selected correlation doesn\'t exist. Terminating.', 'ERROR')
+            return
+        
+    elif npol == 4:
+        if corr == 'RR':
+            corrID = 0
+        elif corr == 'RL':
+            corrID = 1
+        elif corr == 'LR':
+            corrID = 2
+        elif corr == 'LL':
+            corrID = 3
+        else:
+            casalog.post('*** plot3d error: selected correlation doesn\'t exist. Terminating.', 'ERROR')
+            return
+        
+    else:
+        casalog.post('*** plot3d error: see the code, this is a weird error! Terminating.', 'ERROR')
+    
+    corr = corrID
+    
     # calculate number of effective channels per spw
     # I assume that the end channels of each spw have been flagged.
     # Force individual channels to remain at either end of spw,
@@ -74,10 +127,6 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
         nchan = 3
     
     if plotall:
-        # later we will gather scan information by looking at
-	# a single spw and assuming it represents all spw's
-	spw = 0
-	
 	# I don't make any effort to set the amplitude to
         # zero in the gaps between spw's (ie if spw's are not
         # contiguous) because I will assume that flagging of
