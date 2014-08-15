@@ -18,8 +18,8 @@
 		
 		
 		Christopher A. Hales
-		Version 1.1 (tested with CASA Version 4.2.1)
-		4 August 2014
+		Version 1.2 (tested with CASA Version 4.2.1)
+		15 August 2014
 		
 		
 		Code available at: http://github.com/chrishales/plot3d
@@ -77,6 +77,10 @@
                     <value>LL</value>
                 </allowed>
             </param>
+            <param type="string" name="uvrange">
+                <description>uv range in meters (blank for all)</description>
+                <value />
+            </param>
             <param type="bool" name="plotall">
                 <description>plot all spectral windows?</description>
                 <value>False</value>
@@ -124,7 +128,11 @@
        Most arguments are self explanatory. Some are a bit quirky, but
        that's how things are done here in the southwest (or maybe that's
        just me). Get in, take a look, and get out. No bells and whistles.
-
+       
+       uvrange  -- Select data within uvrange (meters)
+                   default: '' (all); examples:
+                   uvrange='0~1000' is same as '0~1000m' and '&lt;1000'
+              
        timecomp -- Number of timestamps to compress. For values N>1,
                    this program will combine N integration cycles and
 		   store their maximum amplitude. Increasing N will
