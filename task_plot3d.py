@@ -34,9 +34,10 @@ from pylab import ion,ioff
 # HISTORY:
 #   1.0  12Jul2014  Initial version.
 #   1.1  04Aug2014  Fixed up time axis problem; correlation selection improved.
+#   1.2  15Aug2014  Added uvrange selection.
 #
 
-def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng):
+def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp,outpng):
 
     #
     # Task plot3d
@@ -44,17 +45,10 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     #    Quickly inspect data for RFI by plotting time vs frequency vs amplitude
     #    Christopher A. Hales
     #
-    #    Version 1.1 (tested with CASA Version 4.2.1)
-    #    4 August 2014
+    #    Version 1.2 (tested with CASA Version 4.2.1)
+    #    15 August 2014
     
     casalog.origin('plot3d')
-    
-    # get number of baselines
-    tb.open(vis+'/ANTENNA')
-    atble=tb.getcol('NAME')
-    tb.close
-    nant=atble.shape[0]
-    nbaselines=nant*(nant-1)/2
     
     # channel to frequency conversion
     tb.open(vis+'/SPECTRAL_WINDOW')
@@ -113,6 +107,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     else:
         casalog.post('*** plot3d error: see the code, this is a weird error! Terminating.', 'ERROR')
     
+    corrSTR = corr
     corr = corrID
     
     # calculate number of effective channels per spw
@@ -212,9 +207,18 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     # this is not the most efficient place in the code for this bit, meh
     ms.reset()
     ms.msselect({'field':str(fid),'spw':str(spw)})
+    if len(uvrange) > 0:
+        ms.msselect({'uvdist':uvrange})
     
     # get the raw timestamps
     Z=ms.getdata('time')['time']
+    
+    # get the unique timestamps and nbaselines for each timestamp
+    # (don't assume the same baselines are available in each time step)
+    temptime = np.unique(Z)
+    nbaselines = []
+    for i in range(len(temptime)):
+        nbaselines.append(len(Z[Z==temptime[i]]))
     
     # Get scan summary in prep for calculating time steps.
     # Note that CASA currently reports all spw's in the
@@ -242,9 +246,18 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     # I can call the variable effntime...!
     scan_ntime    = []
     scan_effntime = []
+    t = 0
     for scan in scan_list:
-        scan_ntime.append(scan_summary[str(scan)]['0']['nRow']/nbaselines)
-        tempvar=int(np.floor(scan_summary[str(scan)]['0']['nRow']/nbaselines/float(timecomp)))+2
+        i = 0
+        bcounter = 0
+        while bcounter < scan_summary[str(scan)]['0']['nRow']:
+            bcounter += nbaselines[t]
+            i += 1
+            t += 1
+        
+        scan_ntime.append(i)
+        tempvar=int(np.floor(i/float(timecomp)))+2
+        
         # guard against the user inputting infinite timecomp
         if tempvar == 2:
             scan_effntime.append(tempvar+1)
@@ -268,7 +281,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
                 if checkfirst:
                     t+=1
                 
-                M[t] += Z[(sum(scan_ntime[:d])+k+h)*nbaselines]
+                M[t] += temptime[sum(scan_ntime[:d])+k+h]
                 if checkfirst:
                     M[t-1] = M[t]-inttime/intdividefactor
                     checkfirst=False
@@ -281,7 +294,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
             if checkfirst:
                 t+=1
             
-            M[t] += Z[(sum(scan_ntime[:d])+k+h)*nbaselines]
+            M[t] += temptime[sum(scan_ntime[:d])+k+h]
             if checkfirst:
                 M[t-1] = M[t]-inttime/intdividefactor
                 checkfirst=False
@@ -290,11 +303,6 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
         t+=1
         M[t] = M[t-1]+inttime/intdividefactor
         t+=1
-        
-        # TESTING: get regular time data to compare
-        # will need to manually increment by nbaselines. meh
-        # Z[nbaselines*1]
-        # compare before subtracting to make comparison easier
     
     # time is in seconds from zero modified Julian date...not very aesthetic
     # subtract off the starting time and convert to minutes
@@ -314,7 +322,9 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
         for i in range(nspw):
             ms.reset()
 	    ms.msselect({'field':str(fid),'spw':str(i)})
-	    
+	    if len(uvrange) > 0:
+                ms.msselect({'uvdist':uvrange})
+            
             # visibility data (X,Y,Z) where
             #   X=4 (RR,RL,LR,LL)
             #   Y=number of channels
@@ -341,7 +351,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
                         if checkfirst:
                             t+=1
                         
-                        P2[s,t] = max(P1[s,(sum(scan_ntime[:d])+k)*nbaselines:(sum(scan_ntime[:d])+k+timecomp)*nbaselines])
+                        P2[s,t] = max(P1[s,sum(nbaselines[:sum(scan_ntime[:d])+k]):sum(nbaselines[:sum(scan_ntime[:d])+k+timecomp])])
                         if clipamp>=0:
                             P2[s,t] = min(clipamp,P2[s,t])
                         
@@ -356,7 +366,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
                         t+=1
                     
                     tempvar=len(range(scan_ntime[d]-k))
-                    P2[s,t] = max(P1[s,(sum(scan_ntime[:d])+k)*nbaselines:(sum(scan_ntime[:d])+k+tempvar)*nbaselines])
+                    P2[s,t] = max(P1[s,sum(nbaselines[:sum(scan_ntime[:d])+k]):sum(nbaselines[:sum(scan_ntime[:d])+k+tempvar])])
                     if clipamp>=0:
                         P2[s,t] = min(clipamp,P2[s,t])
                     
@@ -409,7 +419,10 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
         # just copy the important steps from above
         ms.reset()
 	ms.msselect({'field':str(fid),'spw':str(spw)})
-	tempdata=ms.getdata(datacolumn)
+	if len(uvrange) > 0:
+            ms.msselect({'uvdist':uvrange})
+        
+        tempdata=ms.getdata(datacolumn)
         tempflag=ms.getdata('flag')
         tempflag=np.invert(tempflag['flag'][corr])
         P1=np.multiply(abs(tempdata[datacolumn][corr]),tempflag)
@@ -427,7 +440,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
                     if checkfirst:
                         t+=1
                     
-                    P2[s,t] = max(P1[s,(sum(scan_ntime[:d])+k)*nbaselines:(sum(scan_ntime[:d])+k+timecomp)*nbaselines])
+                    P2[s,t] = max(P1[s,sum(nbaselines[:sum(scan_ntime[:d])+k]):sum(nbaselines[:sum(scan_ntime[:d])+k+timecomp])])
                     if clipamp>=0:
                         P2[s,t] = min(clipamp,P2[s,t])
                     
@@ -442,7 +455,7 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
                     t+=1
                 
                 tempvar=len(range(scan_ntime[d]-k))
-                P2[s,t] = max(P1[s,(sum(scan_ntime[:d])+k)*nbaselines:(sum(scan_ntime[:d])+k+tempvar)*nbaselines])
+                P2[s,t] = max(P1[s,sum(nbaselines[:sum(scan_ntime[:d])+k]):sum(nbaselines[:sum(scan_ntime[:d])+k+tempvar])])
                 if clipamp>=0:
                     P2[s,t] = min(clipamp,P2[s,t])
                 
@@ -498,12 +511,17 @@ def plot3d(vis,fid,datacolumn,corr,plotall,spw,timecomp,chancomp,clipamp,outpng)
     ax.set_xlabel('time (mins)')
     ax.set_ylabel('frequency (MHz)')
     ax.set_zlabel('amplitude')
+    if len(uvrange) == 0:
+        uvrange='ALL'
+    
     if plotall:
-        plot_title='column='+str(datacolumn)+' fid='+str(fid)+' corr='+str(corr)
-        figname=vis.strip('.ms')+'_plot3d_fid'+str(fid)+'_corr'+str(corr)+'_t'+str(timecomp)+'_c'+str(chancomp)
+        plot_title='field:'+str(fid)+' corr:'+corrSTR+' column:'+datacolumn+' uvrange:'+uvrange
+        figname=vis.strip('.ms')+'_plot3d_fid'+str(fid)+'_corr'+corrSTR+'_'+datacolumn+\
+                '_uv'+uvrange+'_t'+str(timecomp)+'_c'+str(chancomp)
     else:
-        plot_title='column='+str(datacolumn)+' fid='+str(fid)+' corr='+str(corr)+' spw='+str(spw)
-        figname=vis.strip('.ms')+'_plot3d_fid'+str(fid)+'_corr'+str(corr)+'_spw'+str(spw)+'_t'+str(timecomp)+'_c'+str(chancomp)
+        plot_title='field:'+str(fid)+' corr:'+corrSTR+' spw:'+str(spw)+' column:'+datacolumn+' uvrange:'+uvrange
+        figname=vis.strip('.ms')+'_plot3d_fid'+str(fid)+'_corr'+corrSTR+'_spw'+str(spw)+'_'+datacolumn+\
+                '_uv'+uvrange+'_t'+str(timecomp)+'_c'+str(chancomp)
     
     ax.set_title(plot_title)
     #ax.set_zscale('log')
