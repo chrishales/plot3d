@@ -27,11 +27,11 @@ then exit CASA. A number of files should have been produced, including ```mytask
 ```
 execfile('mytasks.py')
 ```
-and then
+To see the parameter listing, type
 ```
 inp plot3d
 ```
-to see the parameter listing. For more details on how plot3d works, type
+For more details on how plot3d works, type
 ```
 help plot3d
 ```
