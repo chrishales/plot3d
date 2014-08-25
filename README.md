@@ -3,6 +3,8 @@ plot3d
 
 [CASA](http://casa.nrao.edu/) task to quickly inspect a measurement set for RFI by plotting time vs frequency vs amplitude.
 
+plot3d is designed to retain peak amplitudes of RFI spikes while performing data compression to speed up plotting. Your measurement set remains read-only throughout the task. If your data contains multiple scans, gaps between scans will be reset to 5 integration timescales.
+
 Latest version: 1.2 ([download here](https://github.com/chrishales/plot3d/releases/latest))
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
@@ -29,7 +31,11 @@ and then
 ```
 inp plot3d
 ```
-Set some parameters and press go!
+to see the parameter listing. For more details on how plot3d works, type
+```
+help plot3d
+```
+Now set some parameters and press go!
 
 For a more permanent installation, go to the hidden directory ```.casa``` which resides in your home directory and create a file called ```init.py```. In this file, put the line
 ```
