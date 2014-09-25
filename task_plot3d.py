@@ -35,6 +35,7 @@ from pylab import ion,ioff
 #   1.0  12Jul2014  Initial version.
 #   1.1  04Aug2014  Fixed up time axis problem; correlation selection improved.
 #   1.2  15Aug2014  Added uvrange selection.
+#   1.3  25Aug2014  Bug fix: removed vmin from plot_surface.
 #
 
 def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp,outpng):
@@ -45,8 +46,8 @@ def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp
     #    Quickly inspect data for RFI by plotting time vs frequency vs amplitude
     #    Christopher A. Hales
     #
-    #    Version 1.2 (tested with CASA Version 4.2.1)
-    #    15 August 2014
+    #    Version 1.3 (tested with CASA Version 4.2.1)
+    #    25 September 2014
     
     casalog.origin('plot3d')
     
@@ -525,7 +526,7 @@ def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp
     
     ax.set_title(plot_title)
     #ax.set_zscale('log')
-    ax.plot_surface(M2D, N2D, P, rstride=1, cstride=1, cmap=cm.jet, vmin=0.05)
+    ax.plot_surface(M2D, N2D, P, rstride=1, cstride=1, cmap=cm.jet)
     #if isinstance(plotfig,str):
     #    figname=plotfig
     #    plotfig=1
