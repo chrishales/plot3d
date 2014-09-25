@@ -5,7 +5,7 @@ plot3d
 
 plot3d is designed to retain peak amplitudes of RFI spikes while performing data compression to speed up plotting. Your measurement set remains read-only throughout the task. If your data contains multiple scans, gaps between scans will be reset to 5 integration timescales.
 
-Latest version: 1.2 ([download here](https://github.com/chrishales/plot3d/releases/latest))
+Latest version: 1.3 ([download here](https://github.com/chrishales/plot3d/releases/latest))
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
