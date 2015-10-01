@@ -18,8 +18,8 @@
 		
 		
 		Christopher A. Hales
-		Version 1.3 (tested with CASA Version 4.2.1)
-		25 September 2014
+		Version 1.4 (tested with CASA Version 4.3.0)
+		a October 2015
 		
 		
 		Code available at: http://github.com/chrishales/plot3d
@@ -28,7 +28,7 @@
 		
 		
 		THIS TASK ASSUMES THE FOLLOWING:
-		* The end channel of each spw has been flagged. This
+		* The end channels of each spw have been flagged. This
 		  will make the plots look nicer (you should be flagging
 		  these channels anyway).
 		* The integration time is constant throughout the MS.
@@ -68,13 +68,17 @@
                 </allowed>
             </param>
             <param type="string" name="corr">
-                <description>correlation (RR/RL/LR/LL)</description>
+                <description>correlation (RR/RL/LR/LL/XX/XY/YX/YY)</description>
                 <value>RR</value>
                 <allowed kind="enum">
                     <value>RR</value>
                     <value>RL</value>
                     <value>LR</value>
                     <value>LL</value>
+                    <value>XX</value>
+                    <value>XY</value>
+                    <value>YX</value>
+                    <value>YY</value>
                 </allowed>
             </param>
             <param type="string" name="uvrange">
