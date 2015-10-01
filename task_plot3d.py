@@ -36,6 +36,7 @@ from pylab import ion,ioff
 #   1.1  04Aug2014  Fixed up time axis problem; correlation selection improved.
 #   1.2  15Aug2014  Added uvrange selection.
 #   1.3  25Aug2014  Bug fix: removed vmin from plot_surface.
+#   1.4  01Oct2015  Added explicit handling for linear feed basis.
 #
 
 def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp,outpng):
@@ -46,8 +47,8 @@ def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp
     #    Quickly inspect data for RFI by plotting time vs frequency vs amplitude
     #    Christopher A. Hales
     #
-    #    Version 1.3 (tested with CASA Version 4.2.1)
-    #    25 September 2014
+    #    Version 1.4 (tested with CASA Version 4.3.0)
+    #    1 October 2015
     
     casalog.origin('plot3d')
     
@@ -84,22 +85,22 @@ def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp
     npol=tb.getcell('NUM_CORR',polid)
     tb.close
     if npol == 2:
-        if corr == 'RR':
+        if corr == 'RR' or corr == 'XX':
             corrID = 0
-        elif corr == 'LL':
+        elif corr == 'LL' or corr == 'YY':
             corrID = 1
         else:
             casalog.post('*** plot3d error: selected correlation doesn\'t exist. Terminating.', 'ERROR')
             return
         
     elif npol == 4:
-        if corr == 'RR':
+        if corr == 'RR' or corr == 'XX':
             corrID = 0
-        elif corr == 'RL':
+        elif corr == 'RL' or corr == 'XY':
             corrID = 1
-        elif corr == 'LR':
+        elif corr == 'LR' or corr == 'YX':
             corrID = 2
-        elif corr == 'LL':
+        elif corr == 'LL' or corr == 'YY':
             corrID = 3
         else:
             casalog.post('*** plot3d error: selected correlation doesn\'t exist. Terminating.', 'ERROR')
@@ -327,7 +328,7 @@ def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp
                 ms.msselect({'uvdist':uvrange})
             
             # visibility data (X,Y,Z) where
-            #   X=4 (RR,RL,LR,LL)
+            #   X=4 (RR,RL,LR,LL) or (XX,XY,YX,YY)
             #   Y=number of channels
             #   Z=number of rows (visibilities/4)
             tempdata=ms.getdata(datacolumn)
