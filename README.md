@@ -45,6 +45,4 @@ execfile('/<path_to_task_directory>/mytasks.py')
 Acknowledging use of plot3d
 ======
 
-plot3d is provided in the hope that it (or elements of its code) will be useful for your work. If you find that it is, I would appreciate an acknowledgement in your work and a link to https://github.com/chrishales/plot3d, but this is not required.
-
-Happy plot3d-ing!
+plot3d is provided in the hope that it (or elements of its code) will be useful for your work. If you find that it is, I would appreciate an email and an acknowledgement in your work.
