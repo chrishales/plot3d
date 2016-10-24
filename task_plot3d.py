@@ -6,30 +6,8 @@ import matplotlib.cm as cm
 import numpy as np
 from pylab import ion,ioff
 
-# Copyright (c) 2014, Christopher A. Hales
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * The NAMES OF ITS CONTRIBUTORS may not be used to endorse or promote
-#       products derived from this software without specific prior written
-#       permission.
-# 
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL C. A. HALES BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
-# OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# plot3d is released under a BSD 3-Clause License
+# See LICENSE for details
 
 # HISTORY:
 #   1.0  12Jul2014  Initial version.
@@ -37,6 +15,7 @@ from pylab import ion,ioff
 #   1.2  15Aug2014  Added uvrange selection.
 #   1.3  25Aug2014  Bug fix: removed vmin from plot_surface.
 #   1.4  01Oct2015  Added explicit handling for linear feed basis.
+#   1.5  24Oct2016  Minor help file fixes, no change to code
 #
 
 def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp,outpng):
@@ -47,8 +26,8 @@ def plot3d(vis,fid,datacolumn,corr,uvrange,plotall,spw,timecomp,chancomp,clipamp
     #    Quickly inspect data for RFI by plotting time vs frequency vs amplitude
     #    Christopher A. Hales
     #
-    #    Version 1.4 (tested with CASA Version 4.3.0)
-    #    1 October 2015
+    #    Version 1.5 (tested with CASA Version 4.7.0)
+    #    24 October 2016
     
     casalog.origin('plot3d')
     
