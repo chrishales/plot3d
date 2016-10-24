@@ -5,11 +5,13 @@ plot3d
 
 plot3d is designed to retain peak amplitudes of RFI spikes while performing data compression to speed up plotting. Your measurement set remains read-only throughout the task. If your data contains multiple scans, gaps between scans will be reset to 5 integration timescales.
 
-Latest version: 1.4 ([download here](https://github.com/chrishales/plot3d/releases/latest))
+Latest version: 1.5 ([download here](https://github.com/chrishales/plot3d/releases/latest))
+
+Tested with: CASA Version 4.7.0
 
 Written by Christopher A. Hales. Correspondence regarding plot3d is always welcome.
 
-plot3d is released under a BSD 3-Clause Licence (open source, commercially useable); refer to the licence in this repository or the header of ```task_plot3d.py``` for details.
+plot3d is released under a BSD 3-Clause License (open source, commercially useable); refer to LICENSE for details.
 
 An example screenshot of the 3D-rotatable view produced by plot3d is shown below:
 ![screenshot](./screenshot.png)
